@@ -15,9 +15,27 @@ class ResidentController {
     return response.json(resident);
   }
 
-  // store(request, response) {
+  async store(request, response) {
+    const {
+      name, cpf, phone, task_id,
+    } = request.body;
 
-  // }
+    const residentExists = await ResidentsRepository.findByCPF(cpf);
+
+    if (!name || !cpf) {
+      return response.status(400).json({ error: 'Name and CPF are required!' });
+    }
+
+    if (residentExists) {
+      return response.status(400).json({ error: 'CPF is already in use!' });
+    }
+
+    const resident = await ResidentsRepository.create({
+      name, cpf, phone, task_id,
+    });
+
+    response.json(resident);
+  }
 
   // update(request, response) {
 

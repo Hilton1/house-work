@@ -5,5 +5,6 @@ const routes = Router();
 
 routes.get('/residents', ResidentController.index);
 routes.get('/residents/:id', ResidentController.show);
+routes.post('/residents', ResidentController.store);
 
 module.exports = routes;

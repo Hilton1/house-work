@@ -4,12 +4,14 @@ const residents = [
   {
     id: v4(),
     name: 'Hilton',
+    cpf: '08139280445',
     phone: '82999142756',
     task_id: v4(),
   },
   {
     id: v4(),
     name: 'Mizael',
+    cpf: '00000000000',
     phone: '82000000000',
     task_id: v4(),
   },
@@ -23,6 +25,29 @@ class ResidentsRepository {
   findById(id) {
     return new Promise((resolve) => {
       resolve(residents.find((resident) => resident.id === id));
+    });
+  }
+
+  findByCPF(cpf) {
+    return new Promise((resolve) => {
+      resolve(residents.find((resident) => resident.cpf === cpf));
+    });
+  }
+
+  create({
+    name, cpf, phone, task_id,
+  }) {
+    return new Promise((resolve) => {
+      const newResident = {
+        id: v4(),
+        name,
+        cpf,
+        phone,
+        task_id,
+      };
+
+      residents.push(newResident);
+      resolve(newResident);
     });
   }
 }
