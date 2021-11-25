@@ -70,6 +70,13 @@ class ResidentsRepository {
       resolve(updatedResident);
     });
   }
+
+  delete(id) {
+    return new Promise((resolve) => {
+      residents = residents.filter((resident) => resident.id !== id);
+      resolve();
+    });
+  }
 }
 
 module.exports = new ResidentsRepository();

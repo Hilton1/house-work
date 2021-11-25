@@ -70,9 +70,19 @@ class ResidentController {
     return response.json(resident);
   }
 
-  // delete(reqiest, response) {
+  async delete(request, response) {
+    const { id } = request.params;
 
-  // }l
+    const residentExists = await ResidentsRepository.findById(id);
+
+    if (!residentExists) {
+      return response.status(404).json({ error: 'Resident not found' });
+    }
+
+    await ResidentsRepository.delete(id);
+
+    return response.sendStatus(204);
+  }
 }
 
 module.exports = new ResidentController();
