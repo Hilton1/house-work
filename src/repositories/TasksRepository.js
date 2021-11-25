@@ -21,6 +21,18 @@ class TasksRepository {
       resolve(tasks.find((task) => task.id === id));
     });
   }
+
+  create(description) {
+    return new Promise((resolve) => {
+      const newTask = {
+        id: v4(),
+        description,
+      };
+
+      tasks.push(newTask);
+      resolve(newTask);
+    });
+  }
 }
 
 module.exports = new TasksRepository();

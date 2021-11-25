@@ -14,6 +14,14 @@ class TaskController {
 
     return response.json(task);
   }
+
+  async store(request, response) {
+    const { description } = request.body;
+
+    const task = await TasksRepository.create(description);
+
+    return response.json(task);
+  }
 }
 
 module.exports = new TaskController();

@@ -12,5 +12,6 @@ router.delete('/residents/:id', ResidentController.delete);
 
 router.get('/tasks', TaskController.index);
 router.get('/tasks/:id', TaskController.show);
+router.post('/tasks', TaskController.store);
 
 module.exports = router;
