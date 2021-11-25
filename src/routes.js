@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const ResidentController = require('./controllers/ResidentController');
+const TaskController = require('./controllers/TaskController');
 
 const router = Router();
 
@@ -8,5 +9,7 @@ router.get('/residents/:id', ResidentController.show);
 router.post('/residents', ResidentController.store);
 router.put('/residents/:id', ResidentController.update);
 router.delete('/residents/:id', ResidentController.delete);
+
+router.get('/tasks', TaskController.index);
 
 module.exports = router;
