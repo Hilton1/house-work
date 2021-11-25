@@ -1,6 +1,6 @@
 const { v4 } = require('uuid');
 
-const residents = [
+let residents = [
   {
     id: v4(),
     name: 'Hilton',
@@ -48,6 +48,26 @@ class ResidentsRepository {
 
       residents.push(newResident);
       resolve(newResident);
+    });
+  }
+
+  update(id, {
+    name, cpf, phone, task_id,
+  }) {
+    return new Promise((resolve) => {
+      const updatedResident = {
+        id,
+        name,
+        cpf,
+        phone,
+        task_id,
+      };
+
+      residents = residents.map((resident) => (
+        resident.id === id ? updatedResident : resident
+      ));
+
+      resolve(updatedResident);
     });
   }
 }

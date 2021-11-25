@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const ResidentController = require('./controllers/ResidentController');
 
-const routes = Router();
+const router = Router();
 
-routes.get('/residents', ResidentController.index);
-routes.get('/residents/:id', ResidentController.show);
-routes.post('/residents', ResidentController.store);
+router.get('/residents', ResidentController.index);
+router.get('/residents/:id', ResidentController.show);
+router.post('/residents', ResidentController.store);
+router.put('/residents/:id', ResidentController.update);
 
-module.exports = routes;
+module.exports = router;
