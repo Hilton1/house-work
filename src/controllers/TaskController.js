@@ -6,6 +6,14 @@ class TaskController {
 
     return response.json(tasks);
   }
+
+  async show(request, response) {
+    const { id } = request.params;
+
+    const task = await TasksRepository.findById(id);
+
+    return response.json(task);
+  }
 }
 
 module.exports = new TaskController();
