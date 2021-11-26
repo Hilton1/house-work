@@ -12,6 +12,10 @@ class TaskController {
 
     const task = await TasksRepository.findById(id);
 
+    if (!task) {
+      return response.status(404).json({ error: 'Task not found' });
+    }
+
     return response.json(task);
   }
 
