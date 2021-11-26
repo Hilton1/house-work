@@ -48,6 +48,13 @@ class TasksRepository {
       resolve(updatedTask);
     });
   }
+
+  delete(id) {
+    return new Promise((resolve) => {
+      tasks = tasks.filter((task) => task.id !== id);
+      resolve();
+    });
+  }
 }
 
 module.exports = new TasksRepository();
