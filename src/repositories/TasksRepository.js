@@ -1,6 +1,6 @@
 const { v4 } = require('uuid');
 
-const tasks = [
+let tasks = [
   {
     id: v4(),
     description: 'Lavar os pratos',
@@ -31,6 +31,21 @@ class TasksRepository {
 
       tasks.push(newTask);
       resolve(newTask);
+    });
+  }
+
+  update({ id, description }) {
+    return new Promise((resolve) => {
+      const updatedTask = {
+        id,
+        description,
+      };
+
+      tasks = tasks.map((task) => (
+        task.id === id ? updatedTask : task
+      ));
+
+      resolve(updatedTask);
     });
   }
 }

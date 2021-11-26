@@ -26,6 +26,21 @@ class TaskController {
 
     return response.json(task);
   }
+
+  async update(request, response) {
+    const { id } = request.params;
+    const { description } = request.body;
+
+    const taskExists = await TasksRepository.findById(id);
+
+    if (!taskExists) {
+      return response.status(404).json({ error: 'Task not found' });
+    }
+
+    const task = await TasksRepository.update({ id, description });
+
+    return response.json(task);
+  }
 }
 
 module.exports = new TaskController();
