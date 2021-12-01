@@ -27,16 +27,14 @@ class TasksRepository {
     return row;
   }
 
-  create(description) {
-    return new Promise((resolve) => {
-      const newTask = {
-        id: v4(),
-        description,
-      };
+  async create(description) {
+    const [row] = await db.query(`
+      INSERT INTO tasks(name)
+      VALUES ($1)
+      RETURNING *
+    `, [description]);
 
-      tasks.push(newTask);
-      resolve(newTask);
-    });
+    return row;
   }
 
   update({ id, description }) {
