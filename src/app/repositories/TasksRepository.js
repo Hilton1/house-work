@@ -1,20 +1,13 @@
-const { v4 } = require('uuid');
 const db = require('../../database');
 
-let tasks = [
-  {
-    id: v4(),
-    description: 'Lavar os pratos',
-  },
-  {
-    id: v4(),
-    description: 'Limpar a casa',
-  },
-];
-
 class TasksRepository {
-  async findAll() {
-    const rows = await db.query('SELECT * FROM tasks');
+  async findAll(orderBy = 'ASC') {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+
+    const rows = await db.query(`
+      SELECT * FROM tasks
+      ORDER BY name ${direction}
+    `);
     return rows;
   }
 
@@ -37,26 +30,24 @@ class TasksRepository {
     return row;
   }
 
-  update({ id, description }) {
-    return new Promise((resolve) => {
-      const updatedTask = {
-        id,
-        description,
-      };
+  async update(id, { name }) {
+    const [row] = await db.query(`
+      UPDATE tasks
+      SET name = $1
+      WHERE id = $2
+      RETURNING *
+    `, [name, id]);
 
-      tasks = tasks.map((task) => (
-        task.id === id ? updatedTask : task
-      ));
-
-      resolve(updatedTask);
-    });
+    return row;
   }
 
-  delete(id) {
-    return new Promise((resolve) => {
-      tasks = tasks.filter((task) => task.id !== id);
-      resolve();
-    });
+  async delete(id) {
+    const deleteOp = await db.query(`
+      DELETE FROM tasks
+      WHERE ID = $1
+    `, [id]);
+
+    return deleteOp;
   }
 }
 
