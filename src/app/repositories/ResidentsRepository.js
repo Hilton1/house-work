@@ -1,81 +1,59 @@
-const { v4 } = require('uuid');
-
-let residents = [
-  {
-    id: v4(),
-    name: 'Hilton',
-    cpf: '08139280445',
-    phone: '82999142756',
-    task_id: v4(),
-  },
-  {
-    id: v4(),
-    name: 'Mizael',
-    cpf: '00000000000',
-    phone: '82000000000',
-    task_id: v4(),
-  },
-];
+const db = require('../../database/index');
 
 class ResidentsRepository {
-  findAll() {
-    return new Promise((resolve) => resolve(residents));
+  async findAll(orderBy = 'ASC') {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+
+    const rows = await db.query(`SELECT * FROM residents ORDER BY name ${direction}`);
+    return rows;
   }
 
-  findById(id) {
-    return new Promise((resolve) => {
-      resolve(residents.find((resident) => resident.id === id));
-    });
+  async findById(id) {
+    const [row] = await db.query(`
+      SELECT * FROM residents
+      WHERE ID = $1
+    `, [id]);
+
+    return row;
   }
 
-  findByCPF(cpf) {
-    return new Promise((resolve) => {
-      resolve(residents.find((resident) => resident.cpf === cpf));
-    });
+  async findByCPF(cpf) {
+    const [row] = await db.query(`
+      SELECT * FROM residents
+      WHERE cpf = $1
+    `, [cpf]);
+
+    return row;
   }
 
-  create({
+  async create({
     name, cpf, phone, task_id,
   }) {
-    return new Promise((resolve) => {
-      const newResident = {
-        id: v4(),
-        name,
-        cpf,
-        phone,
-        task_id,
-      };
+    const [row] = await db.query(`
+      INSERT INTO residents(name, cpf, phone, task_id)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *
+    `, [name, cpf, phone, task_id]);
 
-      residents.push(newResident);
-      resolve(newResident);
-    });
+    return row;
   }
 
-  update(id, {
+  async update(id, {
     name, cpf, phone, task_id,
   }) {
-    return new Promise((resolve) => {
-      const updatedResident = {
-        id,
-        name,
-        cpf,
-        phone,
-        task_id,
-      };
+    const [row] = await db.query(`
+      UPDATE residents
+      SET name = $1, cpf = $2, phone = $3, task_id = $4
+      WHERE id = $5
+      RETURNING *
+    `, [name, cpf, phone, task_id, id]);
 
-      residents = residents.map((resident) => (
-        resident.id === id ? updatedResident : resident
-      ));
-
-      resolve(updatedResident);
-    });
+    return row;
   }
 
-  delete(id) {
-    return new Promise((resolve) => {
-      residents = residents.filter((resident) => resident.id !== id);
-      resolve();
-    });
+  async delete(id) {
+    const deleteOp = await db.query('DELETE FROM residents WHERE id = $1', [id]);
+    return deleteOp;
   }
 }
 

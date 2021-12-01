@@ -2,7 +2,9 @@ const ResidentsRepository = require('../repositories/ResidentsRepository');
 
 class ResidentController {
   async index(request, response) {
-    const residents = await ResidentsRepository.findAll();
+    const { orderBy } = request.query;
+
+    const residents = await ResidentsRepository.findAll(orderBy);
 
     return response.json(residents);
   }
