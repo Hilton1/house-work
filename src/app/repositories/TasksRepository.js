@@ -1,4 +1,5 @@
 const { v4 } = require('uuid');
+const db = require('../../database');
 
 let tasks = [
   {
@@ -12,14 +13,18 @@ let tasks = [
 ];
 
 class TasksRepository {
-  findAll() {
-    return new Promise((resolve) => resolve(tasks));
+  async findAll() {
+    const rows = await db.query('SELECT * FROM tasks');
+    return rows;
   }
 
-  findById(id) {
-    return new Promise((resolve) => {
-      resolve(tasks.find((task) => task.id === id));
-    });
+  async findById(id) {
+    const [row] = await db.query(`
+      SELECT * FROM tasks
+      WHERE ID = $1
+    `, [id]);
+
+    return row;
   }
 
   create(description) {

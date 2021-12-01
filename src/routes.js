@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const ResidentController = require('./controllers/ResidentController');
-const TaskController = require('./controllers/TaskController');
+const ResidentController = require('./app/controllers/ResidentController');
+const TaskController = require('./app/controllers/TaskController');
 
 const router = Router();
 
