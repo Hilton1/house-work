@@ -4,14 +4,21 @@ class ResidentsRepository {
   async findAll(orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
 
-    const rows = await db.query(`SELECT * FROM residents ORDER BY name ${direction}`);
+    const rows = await db.query(`
+      SELECT residents.*, tasks.name AS task_name
+      FROM residents
+      LEFT JOIN tasks ON tasks.id = residents.task_id
+      ORDER BY residents.name ${direction}
+    `);
     return rows;
   }
 
   async findById(id) {
     const [row] = await db.query(`
-      SELECT * FROM residents
-      WHERE ID = $1
+      SELECT residents.*, tasks.name AS task_name
+      FROM residents
+      LEFT JOIN tasks ON tasks.id = residents.task_id
+      WHERE residents.id = $1
     `, [id]);
 
     return row;
